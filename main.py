@@ -102,3 +102,35 @@ class CreditAccount(Account):
     def get_available_credit(self) -> float:
         """Возвращает количество доступных кредитных средств."""
         return self.credit_limit + self._balance
+
+if __name__ == '__main__':
+    # Тест для проверки кода
+    client_acc = Account("Руслан", 500.0)
+    client_acc.deposit(200.0)
+    client_acc.withdraw(100.0)
+    client_acc.withdraw(900.0)
+
+    print(f"Баланс базового счета: {client_acc.get_balance()}")
+    print("История базового счета:")
+    for op in client_acc.get_history():
+        print(
+            f"  [{op['date_time']}] {op['type']} | {op['amount']} | "
+            f"Баланс: {op['balance_after']} | {op['status']}"
+        )
+
+    print("-" * 50)
+
+    credit_acc = CreditAccount("Екатерина", balance=100.0, credit_limit=300.0)
+    credit_acc.withdraw(250.0)
+
+    print(f"Баланс кредитного счета: {credit_acc.get_balance()}")
+    print(f"Доступный лимит: {credit_acc.get_available_credit()}")
+    print("История кредитного счета:")
+    for op in credit_acc.get_history():
+        credit_info = (
+            f" | Кредит: {op['credit_used']}" if 'credit_used' in op else ""
+        )
+        print(
+            f"  [{op['date_time']}] {op['type']} | {op['amount']} | "
+            f"Баланс: {op['balance_after']} | {op['status']}{credit_info}"
+        )
